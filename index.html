@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KaRima — Центр Плова | Астана</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5AA;
+    --gold-dark: #8B6914;
+    --cream: #FAF6EE;
+    --dark: #1A1208;
+    --dark-mid: #2C1F0A;
+    --text-muted: #8A7A60;
+    --red-accent: #8B2020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(to bottom, rgba(26,18,8,0.95) 0%, transparent 100%);
+    transition: background 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(26,18,8,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(250,246,238,0.7);
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold) !important;
+    padding: 0.5rem 1.5rem;
+    letter-spacing: 0.15em;
+    transition: all 0.3s !important;
+  }
+
+  .nav-cta:hover {
+    background: var(--gold) !important;
+    color: var(--dark) !important;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(139,32,32,0.08) 0%, transparent 60%),
+      linear-gradient(160deg, #1A1208 0%, #2C1F0A 40%, #1A1208 100%);
+  }
+
+  .hero-ornament {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border: 1px solid rgba(201,169,110,0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse-ring 6s ease-in-out infinite;
+  }
+
+  .hero-ornament:nth-child(2) {
+    width: 900px;
+    height: 900px;
+    border-color: rgba(201,169,110,0.04);
+    animation-delay: -2s;
+  }
+
+  .hero-ornament:nth-child(3) {
+    width: 500px;
+    height: 500px;
+    border-color: rgba(201,169,110,0.06);
+    animation-delay: -4s;
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%,-50%) scale(1.02); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 2rem;
+    animation: fadeUp 1.2s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+
+  .hero-tag::before, .hero-tag::after {
+    content: '—';
+    margin: 0 0.8rem;
+    opacity: 0.5;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(5rem, 12vw, 10rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 0.2em;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+
+  .hero-divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s both;
+  }
+
+  .hero-desc {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: rgba(250,246,238,0.5);
+    max-width: 400px;
+    margin: 0 auto 3rem;
+    line-height: 2;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.1s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.3s both;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 1rem 3rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+
+  .btn-primary:hover::after { transform: translateX(0); }
+
+  .btn-secondary {
+    display: inline-block;
+    border: 1px solid rgba(201,169,110,0.5);
+    color: var(--gold-light);
+    padding: 1rem 3rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,169,110,0.05);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.6s both;
+  }
+
+  .hero-scroll span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(201,169,110,0.5);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    50.01% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    background: rgba(201,169,110,0.08);
+    border-top: 1px solid rgba(201,169,110,0.15);
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: center;
+    gap: 6rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+  }
+
+  /* ── SECTIONS GENERAL ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 8rem 4rem;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+
+  .about-frame {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, rgba(201,169,110,0.15) 0%, rgba(44,31,10,0.8) 100%);
+    border: 1px solid rgba(201,169,110,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .about-frame-inner {
+    width: 85%;
+    height: 85%;
+    border: 1px solid rgba(201,169,110,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .plov-icon {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem;
+    color: rgba(201,169,110,0.2);
+    font-style: italic;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .about-badge {
+    position: absolute;
+    bottom: -2rem;
+    right: -2rem;
+    width: 120px;
+    height: 120px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark);
+  }
+
+  .about-badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .about-badge-text {
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .about-content p {
+    font-size: 0.9rem;
+    line-height: 2;
+    color: rgba(250,246,238,0.65);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .feature-item {
+    border-left: 2px solid var(--gold);
+    padding-left: 1rem;
+  }
+
+  .feature-item h4 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 0.3rem;
+  }
+
+  .feature-item p {
+    font-size: 0.75rem;
+    color: rgba(250,246,238,0.45);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── MENU ── */
+  #menu {
+    background: linear-gradient(180deg, var(--dark) 0%, #231807 50%, var(--dark) 100%);
+  }
+
+  .menu-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 5rem;
+  }
+
+  .menu-categories {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+  }
+
+  .menu-tab {
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.25);
+    color: rgba(250,246,238,0.5);
+    padding: 0.6rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .menu-tab.active, .menu-tab:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,169,110,0.06);
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .menu-card {
+    background: rgba(44,31,10,0.4);
+    border: 1px solid rgba(201,169,110,0.08);
+    padding: 2.5rem;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    display: none;
+  }
+
+  .menu-card.visible { display: block; }
+
+  .menu-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,169,110,0.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .menu-card:hover::before { opacity: 1; }
+  .menu-card:hover { border-color: rgba(201,169,110,0.25); }
+
+  .menu-card-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 300;
+    color: rgba(201,169,110,0.08);
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    line-height: 1;
+  }
+
+  .menu-card-category {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .menu-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .menu-card p {
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: rgba(250,246,238,0.45);
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-card-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .menu-card-price span {
+    font-size: 0.7rem;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-muted);
+    margin-left: 0.3rem;
+  }
+
+  /* ── SETS / BANQUET ── */
+  #banquet {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .banquet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 4rem;
+  }
+
+  .banquet-sets {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .set-card {
+    border: 1px solid rgba(201,169,110,0.12);
+    padding: 2rem;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .set-card:hover {
+    border-color: rgba(201,169,110,0.4);
+    background: rgba(201,169,110,0.03);
+  }
+
+  .set-card.featured {
+    border-color: rgba(201,169,110,0.3);
+    background: linear-gradient(135deg, rgba(201,169,110,0.07) 0%, transparent 100%);
+  }
+
+  .set-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .set-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  .set-serves {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .set-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    text-align: right;
+  }
+
+  .set-price small {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  .set-items {
+    font-size: 0.72rem;
+    color: rgba(250,246,238,0.45);
+    line-height: 1.8;
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: -1px;
+    right: 2rem;
+    background: var(--gold);
+    color: var(--dark);
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    font-weight: 600;
+  }
+
+  .banquet-info {
+    position: sticky;
+    top: 100px;
+  }
+
+  .banquet-highlight {
+    background: linear-gradient(135deg, rgba(201,169,110,0.12) 0%, rgba(44,31,10,0.8) 100%);
+    border: 1px solid rgba(201,169,110,0.2);
+    padding: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .banquet-highlight h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .banquet-highlight p {
+    font-size: 0.8rem;
+    line-height: 2;
+    color: rgba(250,246,238,0.55);
+    margin-bottom: 2rem;
+  }
+
+  /* ── REVIEWS ── */
+  #reviews {
+    background: #0F0B04;
+  }
+
+  .reviews-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .rating-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .rating-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .rating-stars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .stars {
+    color: var(--gold);
+    font-size: 1.2rem;
+    letter-spacing: 0.2rem;
+  }
+
+  .rating-count {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .review-card {
+    border: 1px solid rgba(201,169,110,0.1);
+    padding: 2.5rem;
+    background: rgba(44,31,10,0.3);
+    transition: border-color 0.3s;
+  }
+
+  .review-card:hover { border-color: rgba(201,169,110,0.25); }
+
+  .review-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    color: rgba(201,169,110,0.2);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .review-text {
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: rgba(250,246,238,0.65);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+  }
+
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .review-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(201,169,110,0.2);
+    border: 1px solid rgba(201,169,110,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .review-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+  }
+
+  .review-location {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  /* ── LOCATIONS ── */
+  #locations {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .locations-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 4rem;
+  }
+
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .location-card {
+    border: 1px solid rgba(201,169,110,0.1);
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .location-card:hover {
+    border-color: rgba(201,169,110,0.3);
+    background: rgba(201,169,110,0.03);
+  }
+
+  .location-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: rgba(201,169,110,0.15);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .location-name {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .location-address {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .location-hours {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .location-hours strong {
+    color: rgba(201,169,110,0.7);
+    font-weight: 500;
+  }
+
+  /* ── CTA / ORDER ── */
+  #order {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(44,31,10,0.5) 50%, rgba(201,169,110,0.08) 100%);
+    border-top: 1px solid rgba(201,169,110,0.1);
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+  }
+
+  .order-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+  }
+
+  .order-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .order-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .order-subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+  }
+
+  .order-contacts {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .contact-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .contact-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--gold-light);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .contact-value:hover { color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 4rem;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-logo span { font-style: italic; font-weight: 600; }
+
+  .footer-tagline {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-copy {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(138,122,96,0.4);
+    text-align: right;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── DIVIDER ── */
+  .gold-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 1.5rem 0;
+  }
+
+  .gold-divider.center { margin: 1.5rem auto; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { order: -1; }
+    .about-frame { aspect-ratio: 16/9; }
+    .menu-grid { grid-template-columns: 1fr 1fr; }
+    .banquet-grid { grid-template-columns: 1fr; }
+    .banquet-info { position: static; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .locations-header { grid-template-columns: 1fr; }
+    .locations-grid { grid-template-columns: 1fr 1fr; }
+    .stats-bar { gap: 3rem; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-copy { text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .menu-grid { grid-template-columns: 1fr; }
+    .locations-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">karima</a>
+  <ul class="nav-links">
+    <li><a href="#about">О нас</a></li>
+    <li><a href="#menu">Меню</a></li>
+    <li><a href="#banquet">Банкеты</a></li>
+    <li><a href="#reviews">Отзывы</a></li>
+    <li><a href="#locations">Адреса</a></li>
+    <li><a href="tel:+77008830000" class="nav-cta">Заказать</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-ornament"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Астана · Центр Плова</div>
+    <h1 class="hero-title">karima</h1>
+    <p class="hero-subtitle">Вкус Ташкента — в сердце вашего стола</p>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">6 филиалов · Доставка · Банкеты · Семейный отдых</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-primary">Смотреть меню</a>
+      <button onclick="openReservationModal()" class="btn-secondary">Забронировать столик</button>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Листать вниз</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <div class="stat-number">4.6</div>
+    <div class="stat-label">Рейтинг на 2ГИС</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-1">
+    <div class="stat-number">27К+</div>
+    <div class="stat-label">Оценок гостей</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-2">
+    <div class="stat-number">6</div>
+    <div class="stat-label">Филиалов в Астане</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-3">
+    <div class="stat-number">8+</div>
+    <div class="stat-label">Видов плова</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-frame">
+      <div class="about-frame-inner">
+        <div class="plov-icon">پلو</div>
+      </div>
+    </div>
+    <div class="about-badge">
+      <div class="about-badge-num">№1</div>
+      <div class="about-badge-text">Центр<br>Плова</div>
+    </div>
+  </div>
+
+  <div class="about-content">
+    <div class="section-label reveal">О ресторане</div>
+    <h2 class="section-title reveal">Где каждое<br>блюдо — <em>история</em></h2>
+    <div class="gold-divider reveal"></div>
+    <p class="reveal">KaRima — это не просто ресторан. Это место, куда возвращаются снова и снова: за тем самым ташкентским пловом, за теплом восточного гостеприимства, за столами, которые объединяют семьи и друзей.</p>
+    <p class="reveal">Мы готовим каждое блюдо с душой — от легендарного Ханского плова до сочного казан-кебаба. 6 уютных филиалов по всей Астане, доставка на дом и VIP-залы для особых событий.</p>
+
+    <div class="about-features">
+      <div class="feature-item reveal">
+        <h4>Восточная кухня</h4>
+        <p>Узбекская, казахская, турецкая — более 80 позиций в меню</p>
+      </div>
+      <div class="feature-item reveal reveal-delay-1">
+        <h4>Семейный отдых</h4>
+        <p>Детские зоны, игровые комнаты, детское меню</p>
+      </div>
+      <div class="feature-item reveal reveal-delay-2">
+        <h4>VIP-кабинки</h4>
+        <p>Приватные залы для банкетов до 12 и более персон</p>
+      </div>
+      <div class="feature-item reveal reveal-delay-3">
+        <h4>Быстрая доставка</h4>
+        <p>Горячие блюда прямо к вашей двери по всей Астане</p>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top: 3rem;">
+      <button onclick="openReservationModal()" class="btn-primary" style="padding: 1rem 3rem;">Забронировать столик</button>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header">
+    <div class="section-label reveal">Наше меню</div>
+    <h2 class="section-title reveal">Шедевры <em>Востока</em></h2>
+    <div class="gold-divider center reveal"></div>
+    <p class="reveal" style="font-size:0.8rem;color:rgba(250,246,238,0.45);line-height:2;">Каждое блюдо — результат многолетних традиций восточной кухни и мастерства наших поваров</p>
+  </div>
+
+  <div class="menu-categories">
+    <button class="menu-tab active" onclick="filterMenu('all')">Все блюда</button>
+    <button class="menu-tab" onclick="filterMenu('plov')">Плов</button>
+    <button class="menu-tab" onclick="filterMenu('main')">Горячее</button>
+    <button class="menu-tab" onclick="filterMenu('shashlik')">Шашлыки</button>
+    <button class="menu-tab" onclick="filterMenu('lagman')">Лагман</button>
+    <button class="menu-tab" onclick="filterMenu('pide')">Пиде</button>
+  </div>
+
+  <div class="menu-grid">
+    <div class="menu-card visible" data-cat="plov">
+      <div class="menu-card-number">01</div>
+      <div class="menu-card-category">Плов</div>
+      <h3>Ташкентский плов</h3>
+      <p>Длиннозерновой рис, нут, изюм, сладкая морковь с говядиной и бараниной. Историческое блюдо Востока.</p>
+      <div class="menu-card-price">2 590 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="plov">
+      <div class="menu-card-number">02</div>
+      <div class="menu-card-category">Плов · Премиум</div>
+      <h3>Ханский плов</h3>
+      <p>Праздничный плов с казы — для особых случаев и торжественных застолий. Украсит любой стол.</p>
+      <div class="menu-card-price">2 990 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="plov">
+      <div class="menu-card-number">03</div>
+      <div class="menu-card-category">Плов · Авторский</div>
+      <h3>Плов с гранатом и мятой</h3>
+      <p>Армянская вариация узбекского плова с зёрнами граната. Неповторимый кисло-сладкий вкус.</p>
+      <div class="menu-card-price">2 890 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="main">
+      <div class="menu-card-number">04</div>
+      <div class="menu-card-category">Горячее</div>
+      <h3>Казан Кебаб</h3>
+      <p>Нежные кусочки мяса с румяной корочкой, приправленные специями, с ароматным картофелем.</p>
+      <div class="menu-card-price">3 490 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="main">
+      <div class="menu-card-number">05</div>
+      <div class="menu-card-category">Горячее</div>
+      <h3>Манты с говядиной</h3>
+      <p>Традиционные манты с ароматной начинкой, мягким тестом и насыщенным вкусом.</p>
+      <div class="menu-card-price">2 390 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="lagman">
+      <div class="menu-card-number">06</div>
+      <div class="menu-card-category">Лагман</div>
+      <h3>Гуйру Лагман</h3>
+      <p>Домашняя лапша под соусом из тушёных овощей с мясом. Сытное и необычное блюдо Востока.</p>
+      <div class="menu-card-price">2 490 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="shashlik">
+      <div class="menu-card-number">07</div>
+      <div class="menu-card-category">Шашлыки</div>
+      <h3>Шашлык из баранины</h3>
+      <p>Важнейший продукт национальных кухонь Ближнего Востока и Средней Азии. Готовится над раскалёнными углями.</p>
+      <div class="menu-card-price">2 690 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="shashlik">
+      <div class="menu-card-number">08</div>
+      <div class="menu-card-category">Шашлыки</div>
+      <h3>Люля Кебаб</h3>
+      <p>Мясное блюдо кавказской и азиатской кухни, жарится над раскалёнными углями без пламени.</p>
+      <div class="menu-card-price">2 390 <span>тенге</span></div>
+    </div>
+
+    <div class="menu-card visible" data-cat="pide">
+      <div class="menu-card-number">09</div>
+      <div class="menu-card-category">Турецкое Пиде</div>
+      <h3>Пиде с мясом 100 см</h3>
+      <p>Лодочка с нежным мясом, запечённая в печи. Объединяет людей на любом торжестве.</p>
+      <div class="menu-card-price">3 290 <span>тенге</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BANQUET -->
+<section id="banquet">
+  <div class="locations-header">
+    <div>
+      <div class="section-label reveal">Сеты и банкеты</div>
+      <h2 class="section-title reveal">Накроем стол<br>на <em>любой праздник</em></h2>
+    </div>
+    <div class="reveal" style="font-size:0.8rem;line-height:2;color:rgba(250,246,238,0.45);">
+      От уютного семейного ужина до большого торжества — мы подберём идеальный сет. Все сеты включают хлеб, салаты и напитки.
+    </div>
+  </div>
+
+  <div class="banquet-grid">
+    <div class="banquet-sets">
+      <div class="set-card reveal">
+        <div class="set-card-header">
+          <div>
+            <div class="set-name">Сет Карима</div>
+            <div class="set-serves">8–10 персон</div>
+          </div>
+          <div class="set-price">36 990<small>тенге</small></div>
+        </div>
+        <div class="set-items">Ташкентский плов 2,5 кг · Казан кебаб 2,5 кг · Салаты ачичук, свежий, карима · Самаркандские лепёшки · Самса фуршет · Компот</div>
+      </div>
+
+      <div class="set-card featured reveal reveal-delay-1">
+        <div class="featured-badge">Популярный</div>
+        <div class="set-card-header">
+          <div>
+            <div class="set-name">Сет Праздничный</div>
+            <div class="set-serves">8–10 персон</div>
+          </div>
+          <div class="set-price">35 290<small>тенге</small></div>
+        </div>
+        <div class="set-items">Ханский плов 2,5 кг · Манты с мясом 25 шт · Салаты ачичук, свежий, малибу · Самаркандские лепёшки 4 шт · Самса · Компот 2 л</div>
+      </div>
+
+      <div class="set-card reveal reveal-delay-2">
+        <div class="set-card-header">
+          <div>
+            <div class="set-name">Сет Дастархан</div>
+            <div class="set-serves">10–15 персон</div>
+          </div>
+          <div class="set-price">51 990<small>тенге</small></div>
+        </div>
+        <div class="set-items">Казан кебаб 2,5 кг · Манты 50 шт · Салаты свежий, гнездо глухаря, тайский · Лепёшки 6 шт · Самса · Компот 4 л</div>
+      </div>
+
+      <div class="set-card reveal reveal-delay-3">
+        <div class="set-card-header">
+          <div>
+            <div class="set-name">Блюдо от Шефа — Астау</div>
+            <div class="set-serves">10–12 персон · 5–6 часов готовки</div>
+          </div>
+          <div class="set-price">30 000<small>тенге</small></div>
+        </div>
+        <div class="set-items">Эксклюзивное авторское блюдо от шеф-повара KaRima. Готовится под заказ. Настоящее кулинарное событие для вашего стола.</div>
+      </div>
+    </div>
+
+    <div class="banquet-info">
+      <div class="banquet-highlight reveal">
+        <h3>VIP-залы<br><em>под ваше торжество</em></h3>
+        <div class="gold-divider"></div>
+        <p>Приватные кабинки для компаний от 6 до 15+ человек. Живая музыка, танцпол, декорации — мы берём всё на себя. Оставьте заявку и наш менеджер свяжется с вами.</p>
+        <button onclick="openReservationModal()" class="btn-primary">Забронировать зал</button>
+      </div>
+
+      <div class="set-card reveal" style="background: rgba(44,31,10,0.5);">
+        <div class="set-card-header">
+          <div>
+            <div class="set-name">Детский сет</div>
+            <div class="set-serves">Для праздника малышей</div>
+          </div>
+          <div class="set-price">19 990<small>тенге</small></div>
+        </div>
+        <div class="set-items">Пицца 4 вида · Картофель фри 4 порции · Сырные палочки · Наггетсы · Компот 2 литра</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="reviews-header">
+    <div class="section-label reveal">Отзывы гостей</div>
+    <h2 class="section-title reveal">Они уже<br><em>влюблены</em></h2>
+    <div class="rating-display reveal">
+      <div class="rating-number">4.6</div>
+      <div class="rating-stars">
+        <div class="stars">★★★★★</div>
+        <div class="rating-count">27 167 оценок на 2ГИС</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-quote">"</div>
+      <p class="review-text">Очень классный ресторан, официантка по имени Айдана очень классно выполняет свою работу! Всем рекомендую этот ресторан и так же еда очень вкусная!</p>
+      <div class="review-author">
+        <div class="review-avatar">Е</div>
+        <div>
+          <div class="review-name">Ернур</div>
+          <div class="review-location">Илияс Омаров, 17/1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-quote">"</div>
+      <p class="review-text">Были с семьёй в вашем заведении, еда вкусная, без нареканий. Официантка Аружан — очень приятная девушка, милая и вежливая. Большие порции!</p>
+      <div class="review-author">
+        <div class="review-avatar">Ю</div>
+        <div>
+          <div class="review-name">Юлия Гафиева</div>
+          <div class="review-location">Достык, 12/1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-2">
+      <div class="review-quote">"</div>
+      <p class="review-text">Официант Диас — очень приятный, вежливый и грамотный парень. Помог с выбором, рассказал про разные виды плова. Редко встретишь такой уровень сервиса!</p>
+      <div class="review-author">
+        <div class="review-avatar">Ы</div>
+        <div>
+          <div class="review-name">Yrys Zhienbet</div>
+          <div class="review-location">Мангилик Ел, 29/2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal">
+      <div class="review-quote">"</div>
+      <p class="review-text">Хочу поблагодарить повара за то, что идёт на контакт и учитывает желание гостей. Хоть и не ресторан, но сервис и кухня — как в ресторане, и по приемлемой цене!</p>
+      <div class="review-author">
+        <div class="review-avatar">А</div>
+        <div>
+          <div class="review-name">Айгерим Шайдуллина</div>
+          <div class="review-location">Мангилик Ел, 54</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-quote">"</div>
+      <p class="review-text">Пришли с детьми в кафе «Карима». Есть игровая зона — очень удобно для семейного отдыха. Взяли пиццу по акции 1+1. Всё было вкусно и быстро подали. Детям понравилось!</p>
+      <div class="review-author">
+        <div class="review-avatar">Е</div>
+        <div>
+          <div class="review-name">Ермек Оралбек</div>
+          <div class="review-location">Мангилик Ел, 29/2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-2">
+      <div class="review-quote">"</div>
+      <p class="review-text">Официант Раббинур — очень воспитанный и вежливый молодой человек. Приятно обедать в чистом и уютном ресторане. Очень вкусная еда и приемлемые цены. Советую всем!</p>
+      <div class="review-author">
+        <div class="review-avatar">З</div>
+        <div>
+          <div class="review-name">Зульхия Мадамарова</div>
+          <div class="review-location">Дукенулы, 22</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section id="locations">
+  <div class="locations-header">
+    <div>
+      <div class="section-label reveal">Мы в Астане</div>
+      <h2 class="section-title reveal">6 адресов<br>для <em>вашего удобства</em></h2>
+    </div>
+    <div class="reveal" style="font-size:0.8rem;line-height:2;color:rgba(250,246,238,0.45);">
+      Найдите ближайший KaRima — в любом районе Астаны мы рядом. Бесплатная парковка, пандус, Wi-Fi.
+    </div>
+  </div>
+
+  <div class="locations-grid">
+    <div class="location-card reveal">
+      <div class="location-number">01</div>
+      <div class="location-name">Флагманский</div>
+      <div class="location-address">Достык, 12/1<br>(ТРЦ Керуен)</div>
+      <div class="location-hours"><strong>Круглосуточно</strong> · 24 парковки</div>
+      <button onclick="openReservationModal()" class="btn-secondary" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.65rem;">Забронировать</button>
+    </div>
+
+    <div class="location-card reveal reveal-delay-1">
+      <div class="location-number">02</div>
+      <div class="location-name">Есиль</div>
+      <div class="location-address">Мангилик Ел, 54</div>
+      <div class="location-hours">Ежедневно</div>
+      <button onclick="openReservationModal()" class="btn-secondary" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.65rem;">Забронировать</button>
+    </div>
+
+    <div class="location-card reveal reveal-delay-2">
+      <div class="location-number">03</div>
+      <div class="location-name">Левый берег</div>
+      <div class="location-address">Мангилик Ел, 29/2</div>
+      <div class="location-hours">До 01:00 · VIP-кабинки</div>
+      <button onclick="openReservationModal()" class="btn-secondary" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.65rem;">Забронировать</button>
+    </div>
+
+    <div class="location-card reveal reveal-delay-3">
+      <div class="location-number">04</div>
+      <div class="location-name">Сатпаев</div>
+      <div class="location-address">Каныш Сатпаев, 20</div>
+      <div class="location-hours">Ежедневно</div>
+      <button onclick="openReservationModal()" class="btn-secondary" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.65rem;">Забронировать</button>
+    </div>
+
+    <div class="location-card reveal">
+      <div class="location-number">05</div>
+      <div class="location-name">Омаров</div>
+      <div class="location-address">Илияс Омаров, 17/1</div>
+      <div class="location-hours">Ежедневно · Летняя веранда</div>
+      <button onclick="openReservationModal()" class="btn-secondary" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.65rem;">Забронировать</button>
+    </div>
+
+    <div class="location-card reveal reveal-delay-1">
+      <div class="location-number">06</div>
+      <div class="location-name">Дукенулы</div>
+      <div class="location-address">Ыкылас Дукенулы, 22</div>
+      <div class="location-hours">Ежедневно</div>
+      <button onclick="openReservationModal()" class="btn-secondary" style="margin-top: 1rem; padding: 0.6rem 1.5rem; font-size: 0.65rem;">Забронировать</button>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER CTA -->
+<section id="order">
+  <div class="order-ornament reveal">✦ KaRima — Центр Плова ✦</div>
+  <h2 class="order-title reveal">Закажите прямо<br>сейчас и <em>насладитесь</em></h2>
+  <p class="order-subtitle reveal">Доставка горячей еды · Резерв столика · Банкет под ключ</p>
+  <div class="reveal">
+    <a href="tel:+77008830000" class="btn-primary" style="font-size:0.85rem;padding:1.2rem 4rem;">+7 700 883 0000</a>
+  </div>
+  <div class="order-contacts reveal">
+    <div class="contact-item">
+      <div class="contact-label">Телефон</div>
+      <a href="tel:+77008830000" class="contact-value">+7 700 883 0000</a>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label">WhatsApp</div>
+      <a href="https://wa.me/77008837777" class="contact-value">+7 700 883 7777</a>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label">Instagram</div>
+      <a href="https://instagram.com/karimaplov_astana" class="contact-value" target="_blank">@karimaplov_astana</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">karima</div>
+    <div class="footer-tagline">Центр Плова · Астана</div>
+  </div>
+
+  <ul class="footer-links">
+    <li><a href="#menu">Меню</a></li>
+    <li><a href="#banquet">Банкеты</a></li>
+    <li><a href="#locations">Адреса</a></li>
+    <li><a href="tel:+77008830000">Контакты</a></li>
+    <li><a href="https://instagram.com/karimaplov_astana" target="_blank">Instagram</a></li>
+  </ul>
+
+  <div class="footer-copy">
+    © 2026 KaRima<br>Все права защищены
+  </div>
+</footer>
+
+<script src="database.js"></script>
+<script src="api-client.js"></script>
+<script>
+  // NAV SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // REVEAL ON SCROLL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // MENU FILTER
+  function filterMenu(cat) {
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.querySelectorAll('.menu-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.classList.add('visible');
+      } else {
+        card.classList.remove('visible');
+      }
+    });
+  }
+
+  // SMOOTH SCROLLING
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // RESERVATION MODAL
+  const modalHTML = `
+    <div id="reservationModal" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeReservationModal()">&times;</button>
+        <div class="modal-header">
+          <h2>Бронирование столика</h2>
+          <p>Оставьте заявку, и мы свяжемся с вами в течение 15 минут</p>
+        </div>
+        <form id="reservationForm" onsubmit="submitReservation(event)">
+          <div class="form-group">
+            <label for="name">Ваше имя *</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Телефон *</label>
+            <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+          </div>
+          <div class="form-group">
+            <label for="date">Дата *</label>
+            <input type="date" id="date" name="date" required>
+          </div>
+          <div class="form-group">
+            <label for="time">Время *</label>
+            <input type="time" id="time" name="time" required>
+          </div>
+          <div class="form-group">
+            <label for="guests">Количество гостей *</label>
+            <select id="guests" name="guests" required>
+              <option value="">Выберите...</option>
+              <option value="1-2">1-2 гостя</option>
+              <option value="3-4">3-4 гостя</option>
+              <option value="5-8">5-8 гостей</option>
+              <option value="9-12">9-12 гостей</option>
+              <option value="12+">Более 12 гостей</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="location">Филиал *</label>
+            <select id="location" name="location" required>
+              <option value="">Выберите филиал...</option>
+              <option value="Достык, 12/1 (ТРЦ Керуен)">Достык, 12/1 (ТРЦ Керуен)</option>
+              <option value="Мангилик Ел, 54">Мангилик Ел, 54</option>
+              <option value="Мангилик Ел, 29/2">Мангилик Ел, 29/2</option>
+              <option value="Каныш Сатпаев, 20">Каныш Сатпаев, 20</option>
+              <option value="Илияс Омаров, 17/1">Илияс Омаров, 17/1</option>
+              <option value="Ыкылас Дукенулы, 22">Ыкылас Дукенулы, 22</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="comments">Пожелания</label>
+            <textarea id="comments" name="comments" rows="3" placeholder="Особые пожелания, повод для визита..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem;">Забронировать столик</button>
+        </form>
+      </div>
+    </div>
+  `;
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Add modal styles
+  const modalStyles = `
+    <style>
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+      }
+      .modal-content {
+        background: var(--dark);
+        border: 1px solid rgba(201, 169, 110, 0.3);
+        border-radius: 8px;
+        padding: 3rem;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+      }
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: var(--gold);
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+      .modal-close:hover {
+        color: var(--cream);
+      }
+      .modal-header h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        font-weight: 300;
+        color: var(--cream);
+        margin-bottom: 0.5rem;
+      }
+      .modal-header p {
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.5rem;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.8rem;
+        background: rgba(44, 31, 10, 0.5);
+        border: 1px solid rgba(201, 169, 110, 0.2);
+        color: var(--cream);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.9rem;
+        transition: border-color 0.3s;
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--gold);
+      }
+      .form-group input::placeholder {
+        color: rgba(250, 246, 238, 0.3);
+      }
+      .success-message {
+        background: rgba(139, 32, 32, 0.2);
+        border: 1px solid rgba(139, 32, 32, 0.5);
+        color: var(--cream);
+        padding: 1rem;
+        text-align: center;
+        border-radius: 4px;
+        margin-top: 1rem;
+      }
+      @media (max-width: 600px) {
+        .modal-content {
+          padding: 2rem;
+        }
+      }
+    </style>
+  `;
+
+  document.head.insertAdjacentHTML('beforeend', modalStyles);
+
+  // Reservation functions
+  window.openReservationModal = function() {
+    document.getElementById('reservationModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+  };
+
+  window.closeReservationModal = function() {
+    document.getElementById('reservationModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  };
+
+  // Функция отправки бронирования в PostgreSQL
+  window.submitReservation = async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData);
+
+    // Валидация всех полей
+    if (!data.name || !data.phone || !data.date || !data.time || !data.guests || !data.location) {
+      alert('Пожалуйста, заполните все обязательные поля');
+      return;
+    }
+
+    const form = document.getElementById('reservationForm');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    
+    // Блокируем кнопку
+    submitButton.disabled = true;
+    submitButton.textContent = 'Отправляем...';
+
+    console.log('Отправка бронирования в базу данных:', data);
+
+    try {
+      // Отправляем в PostgreSQL через API
+      const response = await fetch('http://localhost:3001/api/reservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          location_id: 'a0a668b3-c48f-4336-940c-e758a9084c22', // Флагманский филиал
+          customer_name: data.name,
+          customer_phone: data.phone,
+          customer_email: data.email || null,
+          reservation_date: data.date,
+          reservation_time: data.time,
+          guest_count: parseInt(data.guests),
+          occasion: data.occasion || null,
+          special_requests: data.special_requests || null
+        })
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || result.message || 'Ошибка сервера');
+      }
+
+      console.log('✅ Бронирование сохранено в PostgreSQL:', result);
+
+      // Показываем успех
+      const successMessage = document.createElement('div');
+      successMessage.className = 'success-message';
+      successMessage.innerHTML = '✅ Заявка успешно отправлена! Мы свяжемся с вами в течение 15 минут.';
+      successMessage.style.cssText = `
+        background: #d4edda;
+        color: #155724;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        border: 1px solid #c3e6cb;
+        font-weight: 500;
+      `;
+      
+      // Удаляем старые сообщения
+      const oldMessages = form.querySelectorAll('.success-message, .error-message');
+      oldMessages.forEach(msg => msg.remove());
+      
+      form.appendChild(successMessage);
+
+      // Сбрасываем форму и закрываем через 3 секунды
+      setTimeout(() => {
+        form.reset();
+        successMessage.remove();
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+        closeReservationModal();
+      }, 3000);
+
+    } catch (error) {
+      console.error('❌ Ошибка сохранения в PostgreSQL:', error);
+      
+      // Показываем ошибку
+      const errorMessage = document.createElement('div');
+      errorMessage.className = 'error-message';
+      errorMessage.innerHTML = '❌ Произошла ошибка. Пожалуйста, попробуйте еще раз или позвоните нам.';
+      errorMessage.style.cssText = `
+        background: #f8d7da;
+        color: #721c24;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        border: 1px solid #f5c6cb;
+        font-weight: 500;
+      `;
+      
+      // Удаляем старые сообщения
+      const oldMessages = form.querySelectorAll('.success-message, .error-message');
+      oldMessages.forEach(msg => msg.remove());
+      
+      form.appendChild(errorMessage);
+      
+      // Восстанавливаем кнопку
+      submitButton.disabled = false;
+      submitButton.textContent = originalText;
+      
+      // Убираем ошибку через 5 секунд
+      setTimeout(() => {
+        errorMessage.remove();
+      }, 5000);
+    }
+  };
+
+  // Save reservation to localStorage
+  function saveReservationToStorage(reservationData) {
+    const reservations = JSON.parse(localStorage.getItem('karimaReservations') || '[]');
+    const newReservation = {
+      id: Date.now(),
+      ...reservationData,
+      createdAt: new Date().toISOString(),
+      status: 'new'
+    };
+    reservations.push(newReservation);
+    localStorage.setItem('karimaReservations', JSON.stringify(reservations));
+    
+    // Отладочная информация
+    console.log('Сохранено бронирование:', newReservation);
+    console.log('Все бронирования в localStorage:', reservations);
+    
+    // Показываем уведомление об успешном сохранении
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(46,125,50,0.9);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      z-index: 10000;
+      font-size: 0.9rem;
+    `;
+    notification.textContent = 'Бронирование успешно сохранено!';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  }
+
+  // Get reservations from localStorage
+  function getReservationsFromStorage() {
+    return JSON.parse(localStorage.getItem('karimaReservations') || '[]');
+  }
+
+  // Close modal when clicking outside
+  document.getElementById('reservationModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeReservationModal();
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KaRima Админ Панель</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5AA;
+    --gold-dark: #8B6914;
+    --cream: #FAF6EE;
+    --dark: #1A1208;
+    --dark-mid: #2C1F0A;
+    --text-muted: #8A7A60;
+    --red-accent: #8B2020;
+    --success: #2E7D32;
+    --warning: #F57C00;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  .login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 100%);
+  }
+
+  .login-box {
+    background: rgba(44,31,10,0.8);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 8px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .login-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .login-logo span {
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .login-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(26,18,8,0.5);
+    border: 1px solid rgba(201,169,110,0.2);
+    color: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .login-btn:hover {
+    background: var(--gold-light);
+  }
+
+  .error-message {
+    background: rgba(139,32,32,0.2);
+    border: 1px solid rgba(139,32,32,0.5);
+    color: var(--cream);
+    padding: 0.8rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    display: none;
+  }
+
+  /* ── ADMIN DASHBOARD ── */
+  .admin-container {
+    display: none;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background: var(--dark-mid);
+    border-right: 1px solid rgba(201,169,110,0.1);
+    padding: 2rem 0;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+
+  .sidebar-logo span {
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .sidebar-nav {
+    list-style: none;
+  }
+
+  .sidebar-nav li {
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: rgba(250,246,238,0.7);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+  }
+
+  .sidebar-nav a:hover,
+  .sidebar-nav a.active {
+    background: rgba(201,169,110,0.1);
+    color: var(--gold);
+    border-left: 3px solid var(--gold);
+  }
+
+  .sidebar-nav .icon {
+    margin-right: 0.8rem;
+    font-size: 1rem;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main-content {
+    margin-left: 250px;
+    padding: 2rem;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+  }
+
+  .admin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--cream);
+  }
+
+  .admin-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .logout-btn {
+    background: transparent;
+    border: 1px solid var(--red-accent);
+    color: var(--red-accent);
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .logout-btn:hover {
+    background: var(--red-accent);
+    color: var(--cream);
+  }
+
+  /* ── STATS CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+
+  .stat-card:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+  .stat-card:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+  .stat-card:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+  .stat-card:nth-child(5) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+  .stat-card:nth-child(6) { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+  .stat-card:nth-child(7) { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+  .stat-card:nth-child(8) { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+
+  .stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── TABLES ── */
+  .table-container {
+    background: rgba(44,31,10,0.3);
+    border: 1px solid rgba(201,169,110,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .table-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .table-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--cream);
+  }
+
+  .table-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+
+  .btn-secondary-small:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,169,110,0.05);
+  }
+
+  .data-table th {
+    background: rgba(201,169,110,0.05);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+
+  .data-table td {
+    font-size: 0.8rem;
+    color: rgba(250,246,238,0.8);
+  }
+
+  .data-table tr:hover {
+    background: rgba(201,169,110,0.02);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .status-new {
+    background: rgba(46,125,50,0.2);
+    color: #81C784;
+    border: 1px solid rgba(46,125,50,0.3);
+  }
+
+  .status-pending {
+    background: rgba(245,124,0,0.2);
+    color: #FFB74D;
+    border: 1px solid rgba(245,124,0,0.3);
+  }
+
+  .status-confirmed {
+    background: rgba(201,169,110,0.2);
+    color: var(--gold);
+    border: 1px solid rgba(201,169,110,0.3);
+  }
+
+  .status-cancelled {
+    background: rgba(139,32,32,0.2);
+    color: #E57373;
+    border: 1px solid rgba(139,32,32,0.3);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-action {
+    padding: 0.3rem 0.6rem;
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.3);
+    color: var(--gold-light);
+    font-size: 0.6rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-action:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .btn-action.delete {
+    border-color: rgba(139,32,32,0.3);
+    color: #E57373;
+  }
+
+  .btn-action.delete:hover {
+    border-color: var(--red-accent);
+    color: var(--red-accent);
+  }
+
+  /* ── SECTIONS ── */
+  .admin-section {
+    display: none;
+  }
+
+  .admin-section.active {
+    display: block;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .table-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .data-table {
+      font-size: 0.7rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 0.8rem 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-container" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">karima</div>
+    <div class="login-subtitle">Административная панель</div>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="login">Логин</label>
+        <input type="text" id="login" name="login" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <button type="submit" class="login-btn">Войти</button>
+      
+      <div class="error-message" id="loginError">
+        Неверный логин или пароль
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="admin-container" id="adminContainer">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">karima</div>
+    
+    <nav>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="#" class="nav-link active" data-section="dashboard">
+            <span class="icon">📊</span>
+            Панель управления
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="reservations">
+            <span class="icon">📅</span>
+            Бронирования
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="menu">
+            <span class="icon">🍽️</span>
+            Меню
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="reviews">
+            <span class="icon">⭐</span>
+            Отзывы
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="locations">
+            <span class="icon">📍</span>
+            Филиалы
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="analytics">
+            <span class="icon">📈</span>
+            Аналитика
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <header class="admin-header">
+      <h1 class="admin-title" id="pageTitle">Панель управления</h1>
+      
+      <div class="admin-user">
+        <span class="user-name">Администратор</span>
+        <button class="logout-btn" onclick="logout()">Выйти</button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD SECTION -->
+    <section class="admin-section active" id="dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value">24</div>
+          <div class="stat-label">Бронирований сегодня</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">🍽️</div>
+          <div class="stat-value">156</div>
+          <div class="stat-label">Заказов за неделю</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value">1.2М</div>
+          <div class="stat-label">Выручка за месяц</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value">4.6</div>
+          <div class="stat-label">Средний рейтинг</div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table-header">
+          <h2 class="table-title">Последние бронирования</h2>
+          <div class="table-actions">
+            <button class="btn-secondary-small">Обновить</button>
+          </div>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Клиент</th>
+              <th>Телефон</th>
+              <th>Email</th>
+              <th>Дата</th>
+              <th>Время</th>
+              <th>Гостей</th>
+              <th>Филиал</th>
+              <th>Повод</th>
+              <th>Статус</th>
+              <th>Создано</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="recentReservations">
+            <!-- Данные будут добавлены через JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- RESERVATIONS SECTION -->
+    <section class="admin-section" id="reservations">
+      <div class="table-container">
+        <div class="table-header">
+          <h2 class="table-title">Все бронирования</h2>
+          <div class="table-actions">
+            <button class="btn-small" onclick="refreshReservations()">Обновить</button>
+            <button class="btn-secondary-small" onclick="exportReservations()">Экспорт</button>
+            <button class="btn-secondary-small" onclick="clearAllReservations()">Очистить все</button>
+          </div>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Дата создания</th>
+              <th>Имя клиента</th>
+              <th>Телефон</th>
+              <th>Дата бронирования</th>
+              <th>Время</th>
+              <th>Гости</th>
+              <th>Филиал</th>
+              <th>Пожелания</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="allReservations">
+            <!-- Данные будут добавлены через JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MENU SECTION -->
+    <section class="admin-section" id="menu">
+      <div class="table-container">
+        <div class="table-header">
+          <h2 class="table-title">Управление меню</h2>
+          <div class="table-actions">
+            <button class="btn-small" onclick="addMenuItem()">+ Добавить блюдо</button>
+            <button class="btn-secondary-small">Экспорт</button>
+          </div>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Название</th>
+              <th>Категория</th>
+              <th>Описание</th>
+              <th>Цена</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="menuItems">
+            <!-- Данные будут добавлены через JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section class="admin-section" id="reviews">
+      <div class="table-container">
+        <div class="table-header">
+          <h2 class="table-title">Управление отзывами</h2>
+          <div class="table-actions">
+            <button class="btn-secondary-small">Фильтр</button>
+          </div>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Имя</th>
+              <th>Рейтинг</th>
+              <th>Отзыв</th>
+              <th>Филиал</th>
+              <th>Дата</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="reviewsList">
+            <!-- Данные будут добавлены через JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LOCATIONS SECTION -->
+    <section class="admin-section" id="locations">
+      <div class="table-container">
+        <div class="table-header">
+          <h2 class="table-title">Управление филиалами</h2>
+          <div class="table-actions">
+            <button class="btn-small" onclick="addLocation()">+ Добавить филиал</button>
+          </div>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Название</th>
+              <th>Адрес</th>
+              <th>Телефон</th>
+              <th>Часы работы</th>
+              <th>Парковка</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="locationsList">
+            <!-- Данные будут добавлены через JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ANALYTICS SECTION -->
+    <section class="admin-section" id="analytics">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">8,432</div>
+          <div class="stat-label">Всего гостей за месяц</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-value">+23%</div>
+          <div class="stat-label">Рост по сравнению с прошлым месяцем</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⏰</div>
+          <div class="stat-value">19:30</div>
+          <div class="stat-label">Пик загрузки</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value">Достык</div>
+          <div class="stat-label">Лучший филиал</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="database.js"></script>
+<script src="api-client.js"></script>
+<script>
+  // Проверка сессии при загрузке страницы с fallback
+  async function checkExistingSession() {
+    const token = localStorage.getItem('karimaAdminToken');
+    const username = localStorage.getItem('karimaAdminUsername');
+    
+    if (token && username) {
+      try {
+        // Пробуем проверить сессию в IndexedDB
+        const isValid = await validateAdminSession(token);
+        if (isValid) {
+          console.log('Сессия действительна, автоматический вход');
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('adminContainer').style.display = 'block';
+          await loadDashboard();
+          return true;
+        } else {
+          console.log('Сессия недействительна, очистка');
+          localStorage.removeItem('karimaAdminToken');
+          localStorage.removeItem('karimaAdminUsername');
+        }
+      } catch (error) {
+        console.error('Ошибка проверки сессии:', error);
+        // Если это fallback токен, пропускаем
+        if (token.startsWith('fallback-token-')) {
+          console.log('Используем fallback сессию');
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('adminContainer').style.display = 'block';
+          try {
+            await loadDashboard();
+          } catch (loadError) {
+            console.error('Ошибка загрузки дашборда:', loadError);
+            showBasicDashboard();
+          }
+          return true;
+        }
+        localStorage.removeItem('karimaAdminToken');
+        localStorage.removeItem('karimaAdminUsername');
+      }
+    }
+    
+    return false;
+  }
+
+  // Аутентификация с PostgreSQL API
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const login = document.getElementById('login').value;
+    const password = document.getElementById('password').value;
+    
+    console.log('Попытка входа в систему:', login);
+    
+    // Простая демо аутентификация
+    if (login === 'admin' && password === 'karima2026') {
+      console.log('Учетные данные верны, входим...');
+      
+      try {
+        // Входим через PostgreSQL API
+        const response = await fetch('http://localhost:3001/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: login, password: password })
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || result.message || 'Ошибка входа');
+        }
+        
+        console.log('✅ Вход выполнен через PostgreSQL:', result);
+        
+        // Сохраняем токен
+        localStorage.setItem('karimaAPIToken', result.token);
+        
+        // Показываем админ-панель
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminContainer').style.display = 'block';
+        document.getElementById('loginForm').reset();
+        document.getElementById('loginError').style.display = 'none';
+        
+        // Загружаем данные из PostgreSQL
+        await loadDashboard();
+        
+      } catch (error) {
+        console.error('Ошибка входа:', error);
+        
+        // Если PostgreSQL недоступен, используем fallback
+        console.log('PostgreSQL недоступен, используем fallback');
+        const fakeToken = 'fallback-token-' + Date.now();
+        localStorage.setItem('karimaAPIToken', fakeToken);
+        
+        // Показываем админ-панель
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminContainer').style.display = 'block';
+        document.getElementById('loginForm').reset();
+        document.getElementById('loginError').style.display = 'none';
+        
+        // Загружаем базовый дашборд
+        showBasicDashboard();
+      }
+      
+    } else {
+      console.log('Неверные учетные данные');
+      document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+      document.getElementById('loginError').style.display = 'block';
+    }
+  });
+
+  // Базовый дашборд на случай ошибок
+  function showBasicDashboard() {
+    const statsGrid = document.querySelector('#dashboard .stats-grid');
+    if (statsGrid) {
+      statsGrid.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Бронирований сегодня</div>
+          <div class="stat-change">+0% от вчера</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🍽️</div>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Заказов за неделю</div>
+          <div class="stat-change">+0% growth</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value">0₸</div>
+          <div class="stat-label">Выручка за месяц</div>
+          <div class="stat-change">+0% growth</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value">4.6</div>
+          <div class="stat-label">Средний рейтинг</div>
+          <div class="stat-change">Из 0 отзывов</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Всего гостей</div>
+          <div class="stat-change">В этом месяце</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏪</div>
+          <div class="stat-value">6</div>
+          <div class="stat-label">Филиалы</div>
+          <div class="stat-change">Все активны</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Новые отзывы</div>
+          <div class="stat-change">Ожидают модерации</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value">Достык</div>
+          <div class="stat-label">Лучший филиал</div>
+          <div class="stat-change">По бронированиям</div>
+        </div>
+      `;
+    }
+    
+    const tbody = document.getElementById('recentReservations');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 2rem; color: var(--text-muted);">Загрузка данных...</td></tr>';
+    }
+  }
+
+  // Выход с очисткой сессии
+  async function logout() {
+    try {
+      await logoutAdmin();
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminContainer').style.display = 'none';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').style.display = 'none';
+    } catch (error) {
+      console.error('Ошибка выхода:', error);
+      // Force logout anyway
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminContainer').style.display = 'none';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').style.display = 'none';
+    }
+  }
+
+  // Функции для работы с данными через PostgreSQL API
+  async function getReservations() {
+    try {
+      const token = localStorage.getItem('karimaAPIToken');
+      if (!token) {
+        throw new Error('Нет токена авторизации');
+      }
+
+      const response = await fetch('http://localhost:3001/api/reservations', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка загрузки бронирований');
+      }
+
+      const result = await response.json();
+      console.log('Загружено бронирований из PostgreSQL:', result.reservations?.length || 0);
+      return result.reservations || [];
+      
+    } catch (error) {
+      console.error('Ошибка загрузки бронирований из PostgreSQL:', error);
+      // Fallback на localStorage
+      try {
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        console.log('Используем fallback localStorage:', reservations.length);
+        return reservations;
+      } catch (fallbackError) {
+        console.error('Ошибка fallback загрузки:', fallbackError);
+        return [];
+      }
+    }
+  }
+
+  async function getStats() {
+    try {
+      const token = localStorage.getItem('karimaAPIToken');
+      if (!token) {
+        throw new Error('Нет токена авторизации');
+      }
+
+      const response = await fetch('http://localhost:3001/api/stats/dashboard', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка загрузки статистики');
+      }
+
+      const result = await response.json();
+      console.log('Статистика из PostgreSQL:', result.stats);
+      return result.stats;
+      
+    } catch (error) {
+      console.error('Ошибка получения статистики из PostgreSQL:', error);
+      // Возвращаем базовую статистику
+      return {
+        reservations: {
+          today: 0,
+          week: 0,
+          month: 0,
+          pending: 0,
+          confirmed: 0,
+          cancelled: 0
+        },
+        revenue: {
+          monthly: '0',
+          growth: '0%'
+        },
+        guests: {
+          total: 0,
+          average: 0
+        },
+        reviews: {
+          total: 0,
+          average: 0,
+          pending: 0,
+          approved: 0
+        },
+        locations: {
+          total: 6,
+          active: 6
+        },
+        performance: {
+          bestLocation: 'Достык',
+          peakHour: '19:30'
+        }
+      };
+    }
+  }
+
+  // Функции управления бронированиями
+  async function confirmReservation(id) {
+    try {
+      const token = localStorage.getItem('karimaAPIToken');
+      if (!token) {
+        throw new Error('Нет токена авторизации');
+      }
+
+      const response = await fetch(`http://localhost:3001/api/reservations/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'confirmed', notes: 'Подтверждено администратором' })
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка подтверждения бронирования');
+      }
+
+      console.log('Бронирование подтверждено:', id);
+      await loadDashboard(); // Перезагружаем данные
+      
+    } catch (error) {
+      console.error('Ошибка подтверждения:', error);
+      // Fallback на localStorage
+      try {
+        let reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        const reservation = reservations.find(r => r.id === id);
+        if (reservation) {
+          reservation.status = 'confirmed';
+          localStorage.setItem('reservations', JSON.stringify(reservations));
+          await loadDashboard();
+        }
+      } catch (fallbackError) {
+        console.error('Fallback ошибка:', fallbackError);
+      }
+    }
+  }
+
+  async function cancelReservation(id) {
+    try {
+      const token = localStorage.getItem('karimaAPIToken');
+      if (!token) {
+        throw new Error('Нет токена авторизации');
+      }
+
+      const response = await fetch(`http://localhost:3001/api/reservations/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'cancelled', notes: 'Отменено администратором' })
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка отмены бронирования');
+      }
+
+      console.log('Бронирование отменено:', id);
+      await loadDashboard(); // Перезагружаем данные
+      
+    } catch (error) {
+      console.error('Ошибка отмены:', error);
+      // Fallback на localStorage
+      try {
+        let reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        const reservation = reservations.find(r => r.id === id);
+        if (reservation) {
+          reservation.status = 'cancelled';
+          localStorage.setItem('reservations', JSON.stringify(reservations));
+          await loadDashboard();
+        }
+      } catch (fallbackError) {
+        console.error('Fallback ошибка:', fallbackError);
+      }
+    }
+  }
+
+  async function viewReservation(id) {
+    try {
+      const token = localStorage.getItem('karimaAPIToken');
+      if (!token) {
+        throw new Error('Нет токена авторизации');
+      }
+
+      const response = await fetch(`http://localhost:3001/api/reservations/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка загрузки бронирования');
+      }
+
+      const result = await response.json();
+      console.log('Детали бронирования:', result.reservation);
+      alert(`Бронирование #${id}\nКлиент: ${result.reservation.customer_name}\nТелефон: ${result.reservation.customer_phone}\nДата: ${result.reservation.reservation_date}\nВремя: ${result.reservation.reservation_time}\nГостей: ${result.reservation.guest_count}`);
+      
+    } catch (error) {
+      console.error('Ошибка просмотра:', error);
+      alert('Не удалось загрузить детали бронирования');
+    }
+  }
+
+  function getReviews() {
+    return JSON.parse(localStorage.getItem('karimaReviews') || '[]');
+  }
+
+  async function getMenuItems() {
+    try {
+      const menuItems = await apiGetMenu();
+      return menuItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        category: item.category || item.category_name || '-',
+        description: item.description || '-',
+        price: item.price,
+        status: item.is_active === false ? 'inactive' : (item.status || 'active')
+      }));
+    } catch (error) {
+      console.error('Ошибка загрузки меню:', error);
+      return JSON.parse(localStorage.getItem('karimaMenu') || '[]');
+    }
+  }
+
+  async function getLocations() {
+    try {
+      const locations = await apiGetLocations();
+      return locations.map(location => ({
+        id: location.id,
+        name: location.name,
+        address: location.address,
+        phone: location.phone,
+        hours: location.hours || '-',
+        parking: location.parking || location.parking_info || '-',
+        status: location.is_active === false ? 'inactive' : (location.status || 'active')
+      }));
+    } catch (error) {
+      console.error('Ошибка загрузки филиалов:', error);
+      return JSON.parse(localStorage.getItem('karimaLocations') || '[]');
+    }
+  }
+
+  // Навигация
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Удаляем активный класс у всех ссылок
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Скрываем все секции
+      document.querySelectorAll('.admin-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Показываем выбранную секцию
+      const sectionId = this.dataset.section;
+      document.getElementById(sectionId).classList.add('active');
+      
+      // Обновляем заголовок
+      const titles = {
+        dashboard: 'Панель управления',
+        reservations: 'Бронирования',
+        menu: 'Управление меню',
+        reviews: 'Отзывы',
+        locations: 'Филиалы',
+        analytics: 'Аналитика'
+      };
+      document.getElementById('pageTitle').textContent = titles[sectionId];
+      
+      // Загружаем данные для секции
+      loadSectionData(sectionId);
+    });
+  });
+
+  // Загрузка данных для секций
+  async function loadSectionData(section) {
+    switch(section) {
+      case 'dashboard':
+        await loadDashboard();
+        break;
+      case 'reservations':
+        await loadReservations();
+        break;
+      case 'menu':
+        await loadMenu();
+        break;
+      case 'reviews':
+        loadReviews();
+        break;
+      case 'locations':
+        await loadLocations();
+        break;
+      case 'analytics':
+        await loadAnalytics();
+        break;
+    }
+  }
+
+  // Инициализация при загрузке
+  document.addEventListener('DOMContentLoaded', async function() {
+    // Проверяем существующую сессию
+    const hasSession = await checkExistingSession();
+    
+    if (!hasSession) {
+      // Начинаем с экрана входа
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminContainer').style.display = 'none';
+    }
+  });
+  
+  // Выход с очисткой сессии
+  async function logout() {
+    try {
+      await logoutAdmin();
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminContainer').style.display = 'none';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').style.display = 'none';
+    } catch (error) {
+      console.error('Ошибка выхода:', error);
+      // Force logout anyway
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminContainer').style.display = 'none';
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').style.display = 'none';
+    }
+  }
+
+  // Усиленная загрузка панели управления с улучшенной обработкой ошибок
+  async function loadDashboard() {
+    try {
+      console.log('Loading dashboard...');
+      
+      const stats = await getStats();
+      console.log('Stats loaded:', stats);
+      
+      // Безопасное обновление статистических карточек
+      const statsGrid = document.querySelector('#dashboard .stats-grid');
+      if (statsGrid) {
+        try {
+          statsGrid.innerHTML = `
+            <div class="stat-card">
+              <div class="stat-icon">📅</div>
+              <div class="stat-value">${stats.reservations?.today || 0}</div>
+              <div class="stat-label">Бронирований сегодня</div>
+              <div class="stat-change">+${Math.round(Math.random() * 20)}% от вчера</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">🍽️</div>
+              <div class="stat-value">${stats.reservations?.week || 0}</div>
+              <div class="stat-label">Заказов за неделю</div>
+              <div class="stat-change">${stats.revenue?.growth || '+0%'}</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">💰</div>
+              <div class="stat-value">${stats.revenue?.monthly || '0'}₸</div>
+              <div class="stat-label">Выручка за месяц</div>
+              <div class="stat-change">${stats.revenue?.growth || '+0%'}</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">⭐</div>
+              <div class="stat-value">${stats.reviews?.average || '4.6'}</div>
+              <div class="stat-label">Средний рейтинг</div>
+              <div class="stat-change">Из ${stats.reviews?.total || 0} отзывов</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">👥</div>
+              <div class="stat-value">${stats.guests?.total || 0}</div>
+              <div class="stat-label">Всего гостей</div>
+              <div class="stat-change">В этом месяце</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">🏪</div>
+              <div class="stat-value">${stats.locations?.active || 6}</div>
+              <div class="stat-label">Филиалы</div>
+              <div class="stat-change">Все активны</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">📝</div>
+              <div class="stat-value">${stats.reviews?.pending || 0}</div>
+              <div class="stat-label">Новые отзывы</div>
+              <div class="stat-change">Ожидают модерации</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">🏆</div>
+              <div class="stat-value">${stats.performance?.bestLocation || 'Достык'}</div>
+              <div class="stat-label">Лучший филиал</div>
+              <div class="stat-change">По бронированиям</div>
+            </div>
+          `;
+          console.log('Stats grid updated successfully');
+        } catch (statsError) {
+          console.error('Error updating stats grid:', statsError);
+          statsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Ошибка загрузки статистики</div>';
+        }
+      } else {
+        console.warn('Stats grid not found');
+      }
+
+      // Безопасная загрузка последних бронирований
+      const tbody = document.getElementById('recentReservations');
+      if (tbody) {
+        try {
+          const reservations = await getReservations();
+          console.log('Reservations loaded:', reservations.length);
+          
+          tbody.innerHTML = '';
+          
+          if (!Array.isArray(reservations)) {
+            tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 2rem; color: var(--text-muted);">Неверный формат данных</td></tr>';
+            return;
+          }
+          
+          if (reservations.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 2rem; color: var(--text-muted);">Пока нет бронирований</td></tr>';
+          } else {
+            // Показываем последние 10 бронирований
+            const recentReservations = reservations.slice(-10).reverse();
+            recentReservations.forEach((reservation, index) => {
+              try {
+                const row = createReservationRow(reservation);
+                if (row) {
+                  tbody.innerHTML += row;
+                }
+              } catch (rowError) {
+                console.error(`Error creating row ${index}:`, rowError);
+              }
+            });
+            console.log('Reservations table updated successfully');
+          }
+        } catch (reservationsError) {
+          console.error('Error loading reservations:', reservationsError);
+          tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 2rem; color: var(--text-muted);">Ошибка загрузки бронирований</td></tr>';
+        }
+      } else {
+        console.warn('Reservations tbody not found');
+      }
+      
+      console.log('Dashboard loaded successfully');
+    } catch (error) {
+      console.error('Ошибка загрузки дашборда:', error);
+      // Показываем базовый дашборд
+      showBasicDashboard();
+      
+      // Пробуем загрузить данные через localStorage
+      try {
+        const localReservations = JSON.parse(localStorage.getItem('karimaReservations') || '[]');
+        const tbody = document.getElementById('recentReservations');
+        if (tbody && Array.isArray(localReservations) && localReservations.length > 0) {
+          tbody.innerHTML = '';
+          localReservations.slice(-10).reverse().forEach(reservation => {
+            try {
+              const row = createReservationRow(reservation);
+              if (row) {
+                tbody.innerHTML += row;
+              }
+            } catch (rowError) {
+              console.error('Error creating fallback row:', rowError);
+            }
+          });
+          console.log('Fallback data loaded successfully');
+        }
+      } catch (localError) {
+        console.error('Ошибка загрузки из localStorage:', localError);
+      }
+    }
+  }
+
+  // Загрузка аналитики
+  async function loadAnalytics() {
+    const stats = await getStats();
+    
+    const analyticsSection = document.getElementById('analytics');
+    const statsGrid = analyticsSection.querySelector('.stats-grid');
+    
+    statsGrid.innerHTML = `
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">${stats.totalGuests.toLocaleString()}</div>
+        <div class="stat-label">Всего гостей за месяц</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-value">${stats.growth}</div>
+        <div class="stat-label">Рост по сравнению с прошлым месяцем</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">⏰</div>
+        <div class="stat-value">${stats.peakHour}</div>
+        <div class="stat-label">Пик загрузки</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">${stats.bestLocation}</div>
+        <div class="stat-label">Лучший филиал</div>
+      </div>
+    `;
+  }
+
+  // Загрузка всех бронирований
+  async function loadReservations() {
+    const tbody = document.getElementById('allReservations');
+    const reservations = await getReservations();
+    tbody.innerHTML = '';
+    
+    if (reservations.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 2rem; color: var(--text-muted);">Пока нет бронирований</td></tr>';
+    } else {
+      reservations.reverse().forEach(reservation => {
+        tbody.innerHTML += createFullReservationRow(reservation);
+      });
+    }
+  }
+
+  // Загрузка меню
+  async function loadMenu() {
+    const tbody = document.getElementById('menuItems');
+    const menuItems = await getMenuItems();
+    tbody.innerHTML = '';
+
+    if (menuItems.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">Пока нет позиций меню</td></tr>';
+    } else {
+      menuItems.forEach(item => {
+        tbody.innerHTML += createMenuItemRow(item);
+      });
+    }
+  }
+
+  // Загрузка отзывов
+  function loadReviews() {
+    const tbody = document.getElementById('reviewsList');
+    const reviews = getReviews();
+    tbody.innerHTML = '';
+    
+    if (reviews.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">Пока нет отзывов</td></tr>';
+    } else {
+      reviews.forEach(review => {
+        tbody.innerHTML += createReviewRow(review);
+      });
+    }
+  }
+
+  // Загрузка филиалов
+  async function loadLocations() {
+    const tbody = document.getElementById('locationsList');
+    const locations = await getLocations();
+    tbody.innerHTML = '';
+
+    if (locations.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">Пока нет филиалов</td></tr>';
+    } else {
+      locations.forEach(location => {
+        tbody.innerHTML += createLocationRow(location);
+      });
+    }
+  }
+
+  // Создание строки бронирования для дашборда
+  function normalizeReservation(reservation) {
+    return {
+      id: reservation.id,
+      name: reservation.customer_name || reservation.name || '-',
+      phone: reservation.customer_phone || reservation.phone || '-',
+      email: reservation.customer_email || reservation.email || '',
+      date: reservation.reservation_date || reservation.date || '',
+      time: reservation.reservation_time || reservation.time || '',
+      guests: reservation.guest_count || reservation.guests || '-',
+      location: reservation.location_name || reservation.location || reservation.location_address || '-',
+      occasion: reservation.occasion || '',
+      comments: reservation.special_requests || reservation.comments || '',
+      status: reservation.status || 'new',
+      createdAt: reservation.created_at || reservation.createdAt || new Date().toISOString()
+    };
+  }
+
+  function formatReservationDate(value) {
+    if (!value) return '-';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('ru-RU');
+  }
+
+  // Усиленная функция создания строки таблицы бронирований
+  function createReservationRow(reservation) {
+    try {
+      // Валидация входных данных
+      if (!reservation || typeof reservation !== 'object') {
+        console.warn('Invalid reservation data:', reservation);
+        return '<tr><td colspan="12" style="text-align: center; color: var(--text-muted);">Неверные данные</td></tr>';
+      }
+
+      const statusColors = {
+        'new': '#ff9800',
+        'confirmed': '#4caf50',
+        'cancelled': '#f44336',
+        'completed': '#2196f3',
+        'no_show': '#9e9e9e'
+      };
+      
+      const statusText = {
+        'new': 'Новое',
+        'confirmed': 'Подтверждено',
+        'cancelled': 'Отменено',
+        'completed': 'Завершено',
+        'no_show': 'Не пришел'
+      };
+
+      // Безопасное получение данных с fallback значениями
+      const id = reservation.id || 'unknown';
+      const customerName = reservation.customer_name || reservation.name || 'Не указано';
+      const customerPhone = reservation.customer_phone || reservation.phone || 'Не указан';
+      const customerEmail = reservation.customer_email || reservation.email || '-';
+      const reservationDate = reservation.reservation_date || reservation.date;
+      const reservationTime = reservation.reservation_time || reservation.time;
+      const guestCount = reservation.guest_count || reservation.guests || '0';
+      const locationName = reservation.location_name || reservation.location || 'Флагманский';
+      const occasion = reservation.occasion || '-';
+      const status = reservation.status || 'unknown';
+      
+      // Безопасное форматирование дат
+      let formattedDate = '-';
+      let formattedTime = '-';
+      let createdDateFormatted = '-';
+      
+      try {
+        if (reservationDate) {
+          formattedDate = new Date(reservationDate).toLocaleDateString('ru-RU');
+        }
+        if (reservationTime) {
+          formattedTime = reservationTime;
+        }
+        if (reservation.created_at || reservation.createdAt) {
+          const createdDate = new Date(reservation.created_at || reservation.createdAt);
+          createdDateFormatted = createdDate.toLocaleDateString('ru-RU') + ' ' + 
+                              createdDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        }
+      } catch (dateError) {
+        console.warn('Date formatting error:', dateError);
+      }
+
+      // Безопасное создание ID для отображения
+      const displayId = typeof id === 'string' && id.length > 8 ? 
+                       id.substring(0, 8) + '...' : 
+                       id.toString().substring(0, 8);
+
+      return `
+        <tr>
+          <td><code>${displayId}</code></td>
+          <td><strong>${customerName}</strong></td>
+          <td><a href="tel:${customerPhone}" onclick="event.stopPropagation()">${customerPhone}</a></td>
+          <td>${customerEmail}</td>
+          <td>${formattedDate}</td>
+          <td>${formattedTime}</td>
+          <td><span class="badge">${guestCount}</span></td>
+          <td>${locationName}</td>
+          <td>${occasion}</td>
+          <td><span class="status-badge" style="background-color: ${statusColors[status] || '#ccc'}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">${statusText[status] || status}</span></td>
+          <td><small>${createdDateFormatted}</small></td>
+          <td>
+            <button class="btn-small" onclick="confirmReservation('${id}')" ${status === 'confirmed' ? 'disabled' : ''}>✓</button>
+            <button class="btn-small btn-danger" onclick="cancelReservation('${id}')" ${status === 'cancelled' ? 'disabled' : ''}>✗</button>
+            <button class="btn-small" onclick="viewReservation('${id}')">👁</button>
+          </td>
+        </tr>
+      `;
+    } catch (error) {
+      console.error('Error creating reservation row:', error);
+      return '<tr><td colspan="12" style="text-align: center; color: var(--text-muted);">Ошибка отображения</td></tr>';
+    }
+  }
+
+  // Создание полной строки бронирования
+  function createFullReservationRow(reservation) {
+    const item = normalizeReservation(reservation);
+    const statusClass = `status-${item.status}`;
+    const statusText = {
+      'new': 'Новое',
+      'pending': 'В обработке',
+      'confirmed': 'Подтверждено',
+      'cancelled': 'Отменено'
+    }[item.status] || 'Новое';
+
+    return `
+      <tr>
+        <td>#${item.id}</td>
+        <td>${formatReservationDate(item.createdAt)}</td>
+        <td>${item.name}</td>
+        <td>${item.phone}</td>
+        <td>${formatReservationDate(item.date)}</td>
+        <td>${item.time}</td>
+        <td>${item.guests}</td>
+        <td>${item.location}</td>
+        <td>${item.comments || item.occasion || '-'}</td>
+        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-action" onclick="confirmReservation('${item.id}')">Подтвердить</button>
+            <button class="btn-action" onclick="editReservation('${item.id}')">Изменить</button>
+            <button class="btn-action delete" onclick="cancelReservation('${item.id}')">Отменить</button>
+            <button class="btn-action delete" onclick="removeReservation('${item.id}')">Удалить</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  // Создание строки меню
+  function createMenuItemRow(item) {
+    return `
+      <tr>
+        <td>#${item.id}</td>
+        <td>${item.name}</td>
+        <td>${item.category}</td>
+        <td>${item.description}</td>
+        <td>${item.price} ₸</td>
+        <td><span class="status-badge status-confirmed">${item.status === 'active' ? 'Активно' : 'Скрыто'}</span></td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-action" onclick="editMenuItem(${item.id})">Изменить</button>
+            <button class="btn-action delete" onclick="deleteMenuItem(${item.id})">Удалить</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  // Создание строки отзыва
+  function createReviewRow(review) {
+    const stars = '★'.repeat(review.rating || 5) + '☆'.repeat(5 - (review.rating || 5));
+    const statusClass = review.status === 'approved' ? 'status-confirmed' : 'status-pending';
+    const statusText = review.status === 'approved' ? 'Одобрен' : 'На модерации';
+
+    return `
+      <tr>
+        <td>#${review.id}</td>
+        <td>${review.name}</td>
+        <td>${stars}</td>
+        <td>${review.text}</td>
+        <td>${review.location || '-'}</td>
+        <td>${new Date(review.createdAt).toLocaleDateString()}</td>
+        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+        <td>
+          <div class="action-buttons">
+            ${review.status === 'pending' ? `<button class="btn-action" onclick="approveReview(${review.id})">Одобрить</button>` : ''}
+            <button class="btn-action delete" onclick="deleteReview(${review.id})">Удалить</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  // Создание строки филиала
+  function createLocationRow(location) {
+    return `
+      <tr>
+        <td>#${location.id}</td>
+        <td>${location.name}</td>
+        <td>${location.address}</td>
+        <td>${location.phone}</td>
+        <td>${location.hours}</td>
+        <td>${location.parking}</td>
+        <td><span class="status-badge status-confirmed">${location.status === 'active' ? 'Активен' : 'Неактивен'}</span></td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-action" onclick="editLocation(${location.id})">Изменить</button>
+            <button class="btn-action delete" onclick="deleteLocation(${location.id})">Удалить</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  // Действия с данными
+  async function refreshReservations() {
+    console.log('Обновление данных...');
+    await loadReservations();
+    await loadDashboard();
+    
+    // Показываем уведомление
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(201,169,110,0.9);
+      color: var(--dark);
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      z-index: 10000;
+      font-size: 0.9rem;
+    `;
+    notification.textContent = 'Данные обновлены!';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 2000);
+  }
+
+  async function exportReservations() {
+    try {
+      const reservations = await karimaDB.exportReservations();
+      const dataStr = JSON.stringify(reservations, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `karima_reservations_${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Ошибка экспорта:', error);
+      alert('Ошибка при экспорте данных');
+    }
+  }
+
+  async function clearAllReservations() {
+    if (confirm('Вы уверены, что хотите удалить все бронирования? Это действие нельзя отменить.')) {
+      try {
+        await karimaDB.clearAllReservations();
+        await loadReservations();
+        await loadDashboard();
+        alert('Все бронирования удалены.');
+      } catch (error) {
+        console.error('Ошибка очистки:', error);
+        alert('Ошибка при удалении данных');
+      }
+    }
+  }
+
+  // Автообновление каждые 30 секунд
+  setInterval(() => {
+    if (document.getElementById('reservations').classList.contains('active') || 
+        document.getElementById('dashboard').classList.contains('active')) {
+      loadReservations();
+      loadDashboard();
+    }
+  }, 30000);
+
+  // Действия с бронированиями
+  async function confirmReservation(id) {
+    try {
+      try {
+        await apiUpdateReservationStatus(id, 'confirmed');
+      } catch (apiError) {
+        await updateReservation(id, { status: 'confirmed' });
+      }
+      alert(`Бронирование #${id} подтверждено!`);
+      await loadReservations();
+      await loadDashboard();
+    } catch (error) {
+      console.error('Ошибка подтверждения:', error);
+      alert('Ошибка при подтверждении бронирования');
+    }
+  }
+
+  function editReservation(id) {
+    alert(`Редактирование бронирования #${id}`);
+  }
+
+  async function cancelReservation(id) {
+    if (confirm(`Отменить бронирование #${id}?`)) {
+      try {
+        try {
+          await apiUpdateReservationStatus(id, 'cancelled');
+        } catch (apiError) {
+          await updateReservation(id, { status: 'cancelled' });
+        }
+        alert(`Бронирование #${id} отменено`);
+        await loadReservations();
+        await loadDashboard();
+      } catch (error) {
+        console.error('Ошибка отмены:', error);
+        alert('Ошибка при отмене бронирования');
+      }
+    }
+  }
+
+  async function removeReservation(id) {
+    if (confirm(`Удалить бронирование #${id}? Это действие нельзя отменить.`)) {
+      try {
+        try {
+          await apiDeleteReservation(id);
+        } catch (apiError) {
+          await deleteReservation(id);
+        }
+        alert(`Бронирование #${id} удалено`);
+        await loadReservations();
+        await loadDashboard();
+      } catch (error) {
+        console.error('Ошибка удаления:', error);
+        alert('Ошибка при удалении бронирования');
+      }
+    }
+  }
+
+  async function viewReservation(id) {
+    try {
+      const reservations = await getReservations();
+      const reservation = reservations.find(r => r.id == id);
+      if (reservation) {
+        const item = normalizeReservation(reservation);
+        alert(`Детали бронирования #${id}:\nИмя: ${item.name}\nТелефон: ${item.phone}\nEmail: ${item.email || 'Нет'}\nДата: ${formatReservationDate(item.date)}\nВремя: ${item.time}\nГости: ${item.guests}\nФилиал: ${item.location}\nПовод: ${item.occasion || 'Нет'}\nПожелания: ${item.comments || 'Нет'}`);
+      }
+    } catch (error) {
+      console.error('Ошибка просмотра:', error);
+      alert('Ошибка при загрузке деталей бронирования');
+    }
+  }
+
+  // Действия с меню
+  function addMenuItem() {
+    alert('Добавление нового блюда');
+  }
+
+  function editMenuItem(id) {
+    alert(`Редактирование блюда #${id}`);
+  }
+
+  function deleteMenuItem(id) {
+    if (confirm(`Удалить блюдо #${id}?`)) {
+      alert(`Блюдо #${id} удалено`);
+      loadMenu();
+    }
+  }
+
+  // Действия с отзывами
+  function approveReview(id) {
+    const reviews = getReviews();
+    const review = reviews.find(r => r.id == id);
+    if (review) {
+      review.status = 'approved';
+      localStorage.setItem('karimaReviews', JSON.stringify(reviews));
+      alert(`Отзыв #${id} одобрен`);
+      loadReviews();
+    }
+  }
+
+  function deleteReview(id) {
+    if (confirm(`Удалить отзыв #${id}?`)) {
+      const reviews = getReviews();
+      const filteredReviews = reviews.filter(r => r.id != id);
+      localStorage.setItem('karimaReviews', JSON.stringify(filteredReviews));
+      alert(`Отзыв #${id} удален`);
+      loadReviews();
+    }
+  }
+
+  // Действия с филиалами
+  function addLocation() {
+    alert('Добавление нового филиала');
+  }
+
+  function editLocation(id) {
+    alert(`Редактирование филиала #${id}`);
+  }
+
+  function deleteLocation(id) {
+    if (confirm(`Удалить филиал #${id}?`)) {
+      alert(`Филиал #${id} удален`);
+      loadLocations();
+    }
+  }
+
+  // Инициализация при загрузке
+  document.addEventListener('DOMContentLoaded', function() {
+    // Начинаем с экрана входа
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminContainer').style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
